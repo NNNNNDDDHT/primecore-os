@@ -1,27 +1,19 @@
 #!/bin/bash
-
+# Prime Core OS - camada de personalização por cima do Bazzite (KDE, AMD/Intel)
 set -ouex pipefail
 
-# Copy the contents of system_files/ of the git repo to /
+# Copia system_files/ (papel de parede, ícones, atalhos, scripts) para a raiz da imagem
 cp -avf "/ctx/system_files"/. /
 
-### Install packages
+# ---------------------------------------------------------------- marca
+# Só PRETTY_NAME muda: ID/NAME continuam do Bazzite para as atualizações seguirem funcionando
+sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="Prime Core OS"/' /usr/lib/os-release
+grep -q '^VARIANT=' /usr/lib/os-release \
+  && sed -i 's/^VARIANT=.*/VARIANT="Prime Core TI"/' /usr/lib/os-release \
+  || echo 'VARIANT="Prime Core TI"' >> /usr/lib/os-release
 
-# Packages can be installed from any enabled yum repo on the image.
-# RPMfusion repos are available by default in ublue main images
-# List of rpmfusion packages can be found here:
-# https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/43/x86_64/repoview/index.html&protocol=https&redirect=1
+# ---------------------------------------------------------------- scripts
+chmod 0755 /usr/bin/primecore-ir-para-windows /usr/libexec/primecore-primeiro-login
 
-# this installs a package from fedora repos
-dnf5 install -y tmux
-
-# Use a COPR Example:
-#
-# dnf5 -y copr enable ublue-os/staging
-# dnf5 -y install package
-# Disable COPRs so they don't end up enabled on the final image:
-# dnf5 -y copr disable ublue-os/staging
-
-#### Example for enabling a System Unit File
-
-systemctl enable podman.socket
+# Ferramenta usada pelo botão "Ir para o Windows"
+dnf5 install -y efibootmgr || true

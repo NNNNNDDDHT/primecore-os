@@ -1,0 +1,8 @@
+{
+    "KPlugin": {
+        "Authors": [ { "Name": "Prime Core TI" } ],
+        "Id": "PrimeCore",
+        "License": "Proprietary",
+        "Name": "Prime Core"
+    }
+}

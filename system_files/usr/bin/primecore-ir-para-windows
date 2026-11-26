@@ -1,0 +1,13 @@
+#!/bin/bash
+# Reinicia direto no Windows (só no próximo boot), sem passar pelo menu.
+num=$(efibootmgr 2>/dev/null | grep -i "Windows Boot Manager" | head -n1 | sed -E 's/^Boot([0-9A-Fa-f]{4}).*/\1/')
+if [ -z "$num" ]; then
+    kdialog --title "Prime Core OS" --error "Não encontrei o Windows no menu de boot da placa-mãe."
+    exit 1
+fi
+kdialog --title "Prime Core OS" --yesno "Reiniciar agora no Windows?\nSalve seus arquivos antes." || exit 0
+if pkexec efibootmgr --bootnext "$num" >/dev/null; then
+    systemctl reboot
+else
+    kdialog --title "Prime Core OS" --sorry "Não foi possível trocar automaticamente.\nAo ligar, escolha Windows no menu de boot."
+fi

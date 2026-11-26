@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Ir para o Windows
+Comment=Reinicia o PC direto no Windows
+Exec=/usr/bin/primecore-ir-para-windows
+Icon=/usr/share/primecore/windows.svg
+Terminal=false
+Categories=System;Game;

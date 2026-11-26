@@ -1,0 +1,20 @@
+#!/bin/bash
+# Aplica o visual Prime Core no primeiro login de cada usuário (só uma vez).
+marker="$HOME/.config/primecore-visual-aplicado"
+[ -f "$marker" ] && exit 0
+sleep 5   # espera o Plasma subir
+
+# Tema escuro + cor de destaque azul Prime Core
+plasma-apply-colorscheme BreezeDark || true
+plasma-apply-colorscheme --accent-color "#0A84FF" || true
+
+# Papel de parede Prime Core
+plasma-apply-wallpaperimage /usr/share/wallpapers/PrimeCore/contents/images/1920x1080.png || true
+
+# Atalho "Ir para o Windows" na área de trabalho
+desk=$(xdg-user-dir DESKTOP 2>/dev/null || echo "$HOME/Desktop")
+mkdir -p "$desk"
+cp /usr/share/applications/primecore-ir-para-windows.desktop "$desk/"
+chmod +x "$desk/primecore-ir-para-windows.desktop"
+
+mkdir -p "$HOME/.config" && touch "$marker"
